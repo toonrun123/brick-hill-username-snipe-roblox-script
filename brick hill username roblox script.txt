@@ -1,0 +1,48 @@
+--[[Dont forgot enabled http service]]
+
+local letters = {"A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P",
+	"Q","R","S","T","U","V","W","X","Y","Z"}
+
+function googa(int)
+	local t = ""
+	for i = 1,int do
+		local random = letters[math.random(1,#letters)]
+		t = tostring(t)..tostring(random)
+	end	
+	return t
+end
+
+local http = "https://api.brick-hill.com/v1/user/id?username="
+local service = game:GetService("HttpService")
+local usernameletter = 3
+local humboldt = {}
+if _G.C then
+else
+	_G.C = 0
+end
+if _G.F then
+else
+	_G.F  = 0
+end
+for i = 1,2 do
+	spawn(function()
+		while wait(0.15) do
+			local gucciname = googa(usernameletter)
+			local real = http..gucciname
+			local complete,errora = pcall(function()
+				local c = service:GetAsync(real)
+				c = service:JSONDecode(c)
+			end)
+			if complete then
+				_G.F += 1
+			end
+			if errora and rawequal(humboldt[gucciname],nil) then
+				_G.C += 1
+				print(gucciname.." Didnt taken!")
+				--[[for i,v in pairs(game.Players:GetPlayers()) do
+					game.ReplicatedStorage.RemoteFunction:InvokeClient(v,gucciname)
+				end]]
+			end
+		end
+	end)	
+end	
